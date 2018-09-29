@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ingroup.dao.PowerInverterGroupDao">
+    
+	<sql id="powerInverterGroupColumns">
+		a.id AS "id",
+		a.inverter_number AS "inverterNumber",
+		a.group_string AS "groupString",
+		a.group_data AS "groupData",
+		a.group_string_type AS "groupStringType",
+		a.power_date AS "powerDate"
+	</sql>
+	
+	<sql id="powerInverterGroupJoins">
+	</sql>
+    
+	<select id="get" resultType="PowerInverterGroup">
+		SELECT 
+			<include refid="powerInverterGroupColumns"/>
+		FROM power_inverter_group a
+		<include refid="powerInverterGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PowerInverterGroup">
+		SELECT 
+			<include refid="powerInverterGroupColumns"/>
+		FROM power_inverter_group a
+		<include refid="powerInverterGroupJoins"/>
+		<where>
+			
+			<if test="inverterNumber != null and inverterNumber != ''">
+				AND a.inverter_number = #{inverterNumber}
+			</if>
+			<if test="groupString != null and groupString != ''">
+				AND a.group_string = #{groupString}
+			</if>
+			<if test="groupStringType != null and groupStringType != ''">
+				AND a.group_string_type = #{groupStringType}
+			</if>
+			<if test="beginPowerDate != null and endPowerDate != null and beginPowerDate != '' and endPowerDate != ''">
+				AND a.power_date BETWEEN #{beginPowerDate} AND #{endPowerDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PowerInverterGroup">
+		SELECT 
+			<include refid="powerInverterGroupColumns"/>
+		FROM power_inverter_group a
+		<include refid="powerInverterGroupJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO power_inverter_group(
+			id,
+			inverter_number,
+			group_string,
+			group_data,
+			group_string_type,
+			power_date
+		) VALUES (
+			#{id},
+			#{inverterNumber},
+			#{groupString},
+			#{groupData},
+			#{groupStringType},
+			#{powerDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE power_inverter_group SET 	
+			inverter_number = #{inverterNumber},
+			group_string = #{groupString},
+			group_data = #{groupData},
+			group_string_type = #{groupStringType},
+			power_date = #{powerDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM power_inverter_group
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

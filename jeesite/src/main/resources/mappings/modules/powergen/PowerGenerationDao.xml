@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.powergen.dao.PowerGenerationDao">
+    
+	<sql id="powerGenerationColumns">
+		a.id AS "id",
+		a.meter_power AS "meterPower",
+		a.theoretical_power AS "theoreticalPower",
+		a.inverter_power AS "inverterPower",
+		a.irradiation AS "irradiation",
+		a.irradiation_power AS "irradiationPower",
+		a.power_date AS "powerDate",
+		a.groups AS "groups"
+	</sql>
+	
+	<sql id="powerGenerationJoins">
+	</sql>
+    
+	<select id="get" resultType="PowerGeneration">
+		SELECT 
+			<include refid="powerGenerationColumns"/>
+		FROM power_generation a
+		<include refid="powerGenerationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PowerGeneration">
+		SELECT 
+			<include refid="powerGenerationColumns"/>
+		FROM power_generation a
+		<include refid="powerGenerationJoins"/>
+		<where>
+			
+			<if test="beginPowerDate != null and endPowerDate != null and beginPowerDate != '' and endPowerDate != ''">
+				AND a.power_date BETWEEN #{beginPowerDate} AND #{endPowerDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PowerGeneration">
+		SELECT 
+			<include refid="powerGenerationColumns"/>
+		FROM power_generation a
+		<include refid="powerGenerationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO power_generation(
+			id,
+			meter_power,
+			theoretical_power,
+			inverter_power,
+			irradiation,
+			irradiation_power,
+			power_date
+		) VALUES (
+			#{id},
+			#{meterPower},
+			#{theoreticalPower},
+			#{inverterPower},
+			#{irradiation},
+			#{irradiationPower},
+			#{powerDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE power_generation SET 	
+			meter_power = #{meterPower},
+			theoretical_power = #{theoreticalPower},
+			inverter_power = #{inverterPower},
+			irradiation = #{irradiation},
+			irradiation_power = #{irradiationPower},
+			power_date = #{powerDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM power_generation
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

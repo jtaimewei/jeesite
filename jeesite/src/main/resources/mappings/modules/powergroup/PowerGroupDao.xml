@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.powergroup.dao.PowerGroupDao">
+    
+	<sql id="powerGroupColumns">
+		a.id AS "id",
+		a.inverter_number AS "inverterNumber",
+		a.group_one_dy AS "groupOneDy",
+		a.group_one_dl AS "groupOneDl",
+		a.group_twody AS "groupTwody",
+		a.group_two_dl AS "groupTwoDl",
+		a.group_three_dy AS "groupThreeDy",
+		a.group_three_dl AS "groupThreeDl",
+		a.group_four_dy AS "groupFourDy",
+		a.group_four_dl AS "groupFourDl",
+		a.group_five_dy AS "groupFiveDy",
+		a.group_five_dl AS "groupFiveDl",
+		a.group_six_dy AS "groupSixDy",
+		a.group_six_dl AS "groupSixDl",
+		a.group_seven_dy AS "groupSevenDy",
+		a.group_seven_dl AS "groupSevenDl",
+		a.group_eight_dy AS "groupEightDy",
+		a.group_eight_dl AS "groupEightDl",
+		a.group_date AS "groupDate"
+	</sql>
+	
+	<sql id="powerGroupJoins">
+	</sql>
+    
+	<select id="get" resultType="PowerGroup">
+		SELECT 
+			<include refid="powerGroupColumns"/>
+		FROM power_group a
+		<include refid="powerGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	<select id="getInverters" resultType="java.lang.String">
+		SELECT 
+			a.inverter_number
+		FROM power_group a
+		GROUP BY a.inverter_number
+	</select>
+	
+	<select id="findList" resultType="PowerGroup">
+		SELECT 
+			<include refid="powerGroupColumns"/>
+		FROM power_group a
+		<include refid="powerGroupJoins"/>
+		<where>
+			
+			<if test="inverterNumber != null and inverterNumber != ''">
+				AND a.inverter_number = #{inverterNumber}
+			</if>
+			<if test="beginGroupDate != null and endGroupDate != null and beginGroupDate != '' and endGroupDate != ''">
+				AND a.group_date BETWEEN #{beginGroupDate} AND #{endGroupDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PowerGroup">
+		SELECT 
+			<include refid="powerGroupColumns"/>
+		FROM power_group a
+		<include refid="powerGroupJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO power_group(
+			id,
+			inverter_number,
+			group_one_dy,
+			group_one_dl,
+			group_twody,
+			group_two_dl,
+			group_three_dy,
+			group_three_dl,
+			group_four_dy,
+			group_four_dl,
+			group_five_dy,
+			group_five_dl,
+			group_six_dy,
+			group_six_dl,
+			group_seven_dy,
+			group_seven_dl,
+			group_eight_dy,
+			group_eight_dl,
+			group_date
+		) VALUES (
+			#{id},
+			#{inverterNumber},
+			#{groupOneDy},
+			#{groupOneDl},
+			#{groupTwody},
+			#{groupTwoDl},
+			#{groupThreeDy},
+			#{groupThreeDl},
+			#{groupFourDy},
+			#{groupFourDl},
+			#{groupFiveDy},
+			#{groupFiveDl},
+			#{groupSixDy},
+			#{groupSixDl},
+			#{groupSevenDy},
+			#{groupSevenDl},
+			#{groupEightDy},
+			#{groupEightDl},
+			#{groupDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE power_group SET 	
+			inverter_number = #{inverterNumber},
+			group_one_dy = #{groupOneDy},
+			group_one_dl = #{groupOneDl},
+			group_twody = #{groupTwody},
+			group_two_dl = #{groupTwoDl},
+			group_three_dy = #{groupThreeDy},
+			group_three_dl = #{groupThreeDl},
+			group_four_dy = #{groupFourDy},
+			group_four_dl = #{groupFourDl},
+			group_five_dy = #{groupFiveDy},
+			group_five_dl = #{groupFiveDl},
+			group_six_dy = #{groupSixDy},
+			group_six_dl = #{groupSixDl},
+			group_seven_dy = #{groupSevenDy},
+			group_seven_dl = #{groupSevenDl},
+			group_eight_dy = #{groupEightDy},
+			group_eight_dl = #{groupEightDl},
+			group_date = #{groupDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM power_group
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

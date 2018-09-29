@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.inmonthavr.dao.PowerInverterMonthAverageDao">
+    
+	<sql id="powerInverterMonthAverageColumns">
+		a.id AS "id",
+		a.inverter_number AS "inverterNumber",
+		a.month_average_power AS "monthAveragePower",
+		a.de_average AS "deAverage",
+		a.group_string_number AS "groupStringNumber",
+		a.string_average_power AS "stringAveragePower",
+		a.power_date AS "powerDate"
+	</sql>
+	
+	<sql id="powerInverterMonthAverageJoins">
+	</sql>
+    
+	<select id="get" resultType="PowerInverterMonthAverage">
+		SELECT 
+			<include refid="powerInverterMonthAverageColumns"/>
+		FROM power_inverter_month_average a
+		<include refid="powerInverterMonthAverageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PowerInverterMonthAverage">
+		SELECT 
+			<include refid="powerInverterMonthAverageColumns"/>
+		FROM power_inverter_month_average a
+		<include refid="powerInverterMonthAverageJoins"/>
+		<where>
+			
+			<if test="inverterNumber != null and inverterNumber != ''">
+				AND a.inverter_number = #{inverterNumber}
+			</if>
+			<if test="beginPowerDate != null and endPowerDate != null and beginPowerDate != '' and endPowerDate != ''">
+				AND a.power_date BETWEEN #{beginPowerDate} AND #{endPowerDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PowerInverterMonthAverage">
+		SELECT 
+			<include refid="powerInverterMonthAverageColumns"/>
+		FROM power_inverter_month_average a
+		<include refid="powerInverterMonthAverageJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO power_inverter_month_average(
+			id,
+			inverter_number,
+			month_average_power,
+			de_average,
+			group_string_number,
+			string_average_power,
+			power_date
+		) VALUES (
+			#{id},
+			#{inverterNumber},
+			#{monthAveragePower},
+			#{deAverage},
+			#{groupStringNumber},
+			#{stringAveragePower},
+			#{powerDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE power_inverter_month_average SET 	
+			inverter_number = #{inverterNumber},
+			month_average_power = #{monthAveragePower},
+			de_average = #{deAverage},
+			group_string_number = #{groupStringNumber},
+			string_average_power = #{stringAveragePower},
+			power_date = #{powerDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM power_inverter_month_average
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

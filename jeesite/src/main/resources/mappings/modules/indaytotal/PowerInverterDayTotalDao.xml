@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.indaytotal.dao.PowerInverterDayTotalDao">
+    
+	<sql id="powerInverterDayTotalColumns">
+		a.id AS "id",
+		a.inverter_number AS "inverterNumber",
+		a.power_amount AS "powerAmount",
+		a.power_date AS "powerDate"
+	</sql>
+	
+	<sql id="powerInverterDayTotalJoins">
+	</sql>
+    
+	<select id="get" resultType="PowerInverterDayTotal">
+		SELECT 
+			<include refid="powerInverterDayTotalColumns"/>
+		FROM power_inverter_day_total a
+		<include refid="powerInverterDayTotalJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PowerInverterDayTotal">
+		SELECT 
+			<include refid="powerInverterDayTotalColumns"/>
+		FROM power_inverter_day_total a
+		<include refid="powerInverterDayTotalJoins"/>
+		<where>
+			
+			<if test="inverterNumber != null and inverterNumber != ''">
+				AND a.inverter_number = #{inverterNumber}
+			</if>
+			<if test="beginPowerDate != null and endPowerDate != null and beginPowerDate != '' and endPowerDate != ''">
+				AND a.power_date BETWEEN #{beginPowerDate} AND #{endPowerDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PowerInverterDayTotal">
+		SELECT 
+			<include refid="powerInverterDayTotalColumns"/>
+		FROM power_inverter_day_total a
+		<include refid="powerInverterDayTotalJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO power_inverter_day_total(
+			id,
+			inverter_number,
+			power_amount,
+			power_date
+		) VALUES (
+			#{id},
+			#{inverterNumber},
+			#{powerAmount},
+			#{powerDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE power_inverter_day_total SET 	
+			inverter_number = #{inverterNumber},
+			power_amount = #{powerAmount},
+			power_date = #{powerDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM power_inverter_day_total
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
